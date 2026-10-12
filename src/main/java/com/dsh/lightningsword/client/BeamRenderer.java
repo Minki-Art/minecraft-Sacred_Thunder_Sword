@@ -1,9 +1,7 @@
 package com.dsh.lightningsword.client;
 
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderSetup;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.render.VertexConsumer;
@@ -20,19 +18,7 @@ public final class BeamRenderer {
    private static final float MIN_LENGTH = 0.5F;
    private static final double NEAR_CLIP = 2.2;
 
-   /** Built once from the vanilla lightning pipeline, then reused for every bolt. */
-   private static RenderLayer lightningLayer;
-
    private BeamRenderer() {
-   }
-
-   private static RenderLayer lightningLayer() {
-      RenderLayer layer = lightningLayer;
-      if (layer == null) {
-         layer = RenderLayer.of("lightning_sword_bolt", RenderSetup.builder(RenderPipelines.RENDERTYPE_LIGHTNING).build());
-         lightningLayer = layer;
-      }
-      return layer;
    }
 
    public static void render(WorldRenderContext context) {
@@ -41,7 +27,7 @@ public final class BeamRenderer {
          MatrixStack matrices = context.matrices();
          if (consumers != null && matrices != null) {
             Vec3d camera = context.gameRenderer().getCamera().getCameraPos();
-            VertexConsumer buffer = consumers.getBuffer(lightningLayer());
+            VertexConsumer buffer = consumers.getBuffer(RenderLayers.lightning());
 
             for (ClientBeams.Beam beam : ClientBeams.active()) {
                Vec3d delta = beam.end.subtract(beam.start);
