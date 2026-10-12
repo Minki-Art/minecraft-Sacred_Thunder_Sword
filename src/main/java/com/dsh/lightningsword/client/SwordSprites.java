@@ -80,8 +80,12 @@ public final class SwordSprites {
         if (!sword && !crystal) {
             return;
         }
+        // 1.21.11 gave item sprites their own atlas (assets/minecraft/atlases/items.json);
+        // in 1.21.1 they still lived in the block atlas, which is why BLOCK_ATLAS_TEXTURE is
+        // deprecated here. Querying the wrong atlas would just return null and silently switch
+        // the animation boost off.
         SpriteAtlasTexture atlas = (SpriteAtlasTexture) client.getTextureManager()
-                .getTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
+                .getTexture(SpriteAtlasTexture.ITEMS_ATLAS_TEXTURE);
         if (atlas == null) {
             return;
         }
