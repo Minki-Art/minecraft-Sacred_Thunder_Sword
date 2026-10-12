@@ -20,7 +20,52 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
+// Resource sanity check: every item/block id, texture, model, recipe, tag, advancement
+// and translation key referenced by the code or the JSON must actually exist.
+// Catches the classes of mistake that only ever show up as a log line in-game
+// (missing model, missing texture, dead lang key, invalid id).
+tasks.register('validateResources') {
+    group = 'verification'
+    description = 'Validates src/main/resources against the code (ids, textures, models, tags, lang keys).'
+    def projectDir = project.layout.projectDirectory.asFile
+    inputs.files(fileTree('src/main/resources'), fileTree('src/main/java'))
+    outputs.upToDateWhen { false }
+    doLast {
+        def candidates = ['python', 'python3', 'py',
+                          'C:\\Users\\asd\\AppData\\Local\\Programs\\Python\\Python312\\python.exe']
+        def python = null
+        for (candidate in candidates) {
+            try {
+                def probe = new ProcessBuilder(candidate, '-c', 'print(1)').redirectErrorStream(true).start()
+                probe.inputStream.text
+                if (probe.waitFor() == 0) { python = candidate; break }
+            } catch (Exception ignored) {
+            }
+        }
+        if (python == null) {
+            logger.lifecycle('[validateResources] no python interpreter found, check skipped')
+            return
+        }
+        def script = new File(projectDir, 'tools/validate_resources.py')
+        if (!script.exists()) {
+            throw new GradleException("[validateResources] missing ${script}")
+        }
+        def proc = new ProcessBuilder(python, script.absolutePath)
+                .directory(projectDir).redirectErrorStream(true).start()
+        def output = proc.inputStream.text
+        def code = proc.waitFor()
+        def keep = ['registered ids', 'json parsed', 'lang:', 'note:', 'all resource checks', 'FAIL']
+        logger.lifecycle(output.readLines().findAll { line ->
+            keep.any { line.contains(it) }
+        }.join('\n'))
+        if (code != 0) {
+            throw new GradleException("[validateResources] FAILED (exit ${code})\n${output}")
+        }
+    }
+}
+
 processResources {
+    dependsOn 'validateResources'
     inputs.property "version", project.version
     filesMatching("fabric.mod.json") {
         expand "version": project.version

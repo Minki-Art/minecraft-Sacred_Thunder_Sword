@@ -2,13 +2,5 @@
   "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "lightning_sword:item/lightning_sword"
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "lightning_sword:aim": 0.5
-      },
-      "model": "lightning_sword:item/lightning_sword_aim_5"
-    }
-  ]
+  }
 }

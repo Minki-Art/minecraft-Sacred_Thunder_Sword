@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:using_item",
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "lightning_sword:item/lightning_sword_aim_5"
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "lightning_sword:item/lightning_sword"
+    }
+  }
+}

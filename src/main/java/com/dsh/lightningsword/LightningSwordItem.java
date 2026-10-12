@@ -1,18 +1,20 @@
 package com.dsh.lightningsword;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.component.type.TooltipDisplayComponent;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.util.UseAction;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.Vec3d;
@@ -24,10 +26,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.item.Item.Settings;
 import net.minecraft.item.Item.TooltipContext;
 
-public class LightningSwordItem extends SwordItem {
+public class LightningSwordItem extends Item {
 
-   public LightningSwordItem(ToolMaterial material, Settings settings) {
-      super(material, settings);
+   public LightningSwordItem(Settings settings) {
+      super(settings);
    }
 
    public UseAction getUseAction(ItemStack stack) {
@@ -38,20 +40,20 @@ public class LightningSwordItem extends SwordItem {
       return 72000;
    }
 
-   public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-      if (!world.isClient() && selected && entity instanceof PlayerEntity player) {
+   public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, EquipmentSlot slot) {
+      if (!world.isClient() && slot == EquipmentSlot.MAINHAND && entity instanceof PlayerEntity player) {
          if (!player.isUsingItem() && world.getTime() % 5L == 0L) {
             Vec3d look = player.getRotationVec(1.0F).normalize();
             Vec3d tip = LightningBeam.origin(player, look);
-            world.addParticle(ParticleTypes.ELECTRIC_SPARK, tip.x, tip.y, tip.z, 0.0, 0.0, 0.0);
+            world.addParticleClient(ParticleTypes.ELECTRIC_SPARK, tip.x, tip.y, tip.z, 0.0, 0.0, 0.0);
          }
       }
    }
 
-   public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+   public ActionResult use(World world, PlayerEntity user, Hand hand) {
       ItemStack stack = user.getStackInHand(hand);
-      if (user.getItemCooldownManager().isCoolingDown(this)) {
-         return TypedActionResult.fail(stack);
+      if (user.getItemCooldownManager().isCoolingDown(stack)) {
+         return ActionResult.FAIL;
       }
 
       user.setCurrentHand(hand);
@@ -68,7 +70,7 @@ public class LightningSwordItem extends SwordItem {
          );
       }
 
-      return TypedActionResult.consume(stack);
+      return ActionResult.CONSUME;
    }
 
    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
@@ -77,26 +79,23 @@ public class LightningSwordItem extends SwordItem {
       }
    }
 
-   public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+   public boolean onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
       if (!world.isClient() && user instanceof PlayerEntity player) {
          int used = this.getMaxUseTime(stack, user) - remainingUseTicks;
          if (used >= 8) {
             LightningBeam.fire(world, player, chargePower(used));
-            player.getItemCooldownManager().set(this, 10);
+            player.getItemCooldownManager().set(stack, 10);
             if (!player.isCreative()) {
                stack.damage(1, player, EquipmentSlot.MAINHAND);
             }
          }
       }
+      return false;
    }
 
-   public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-      return ingredient.isOf(ModItems.THUNDER_CRYSTAL) || super.canRepair(stack, ingredient);
-   }
-
-   public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-      tooltip.add(Text.translatable("item.lightning_sword.lightning_sword.tooltip").formatted(Formatting.AQUA));
-      tooltip.add(Text.translatable("item.lightning_sword.lightning_sword.tooltip2").formatted(Formatting.GRAY));
+   public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
+      textConsumer.accept(Text.translatable("item.lightning_sword.lightning_sword.tooltip").formatted(Formatting.AQUA));
+      textConsumer.accept(Text.translatable("item.lightning_sword.lightning_sword.tooltip2").formatted(Formatting.GRAY));
    }
 
    private static float chargePower(int usedTicks) {
@@ -117,9 +116,9 @@ public class LightningSwordItem extends SwordItem {
          double a = angle + i * ((Math.PI * 2) / count);
          Vec3d offset = side.multiply(Math.cos(a) * radius).add(up.multiply(Math.sin(a) * radius));
          Vec3d point = tip.add(offset);
-         world.addParticle(ParticleTypes.ELECTRIC_SPARK, point.x, point.y, point.z, 0.0, 0.0, 0.0);
+         world.addParticleClient(ParticleTypes.ELECTRIC_SPARK, point.x, point.y, point.z, 0.0, 0.0, 0.0);
          if (i == 0 && power > 0.15F) {
-            world.addParticle(ParticleTypes.END_ROD, point.x, point.y, point.z, 0.0, 0.0, 0.0);
+            world.addParticleClient(ParticleTypes.END_ROD, point.x, point.y, point.z, 0.0, 0.0, 0.0);
          }
       }
 

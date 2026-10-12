@@ -7,7 +7,6 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 
 import java.lang.reflect.Field;
@@ -82,7 +81,7 @@ public final class SwordSprites {
             return;
         }
         SpriteAtlasTexture atlas = (SpriteAtlasTexture) client.getTextureManager()
-                .getTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+                .getTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
         if (atlas == null) {
             return;
         }
@@ -107,12 +106,7 @@ public final class SwordSprites {
     }
 
     private static boolean playerHas(MinecraftClient client, Item item) {
-        for (ItemStack stack : client.player.getInventory().main) {
-            if (stack.isOf(item)) {
-                return true;
-            }
-        }
-        for (ItemStack stack : client.player.getInventory().offHand) {
+        for (ItemStack stack : client.player.getInventory().getMainStacks()) {
             if (stack.isOf(item)) {
                 return true;
             }

@@ -53,7 +53,7 @@ public final class LightningBeam {
 
          if (target != null) {
             target.setOnFireFor(5.0F);
-            target.damage(world.getDamageSources().indirectMagic(player, player), 10.0F);
+            target.damage(serverWorld, world.getDamageSources().indirectMagic(player, player), 10.0F);
          }
 
          LightningBeamPayload payload = new LightningBeamPayload(start, end, world.random.nextInt());

@@ -1,6 +1,7 @@
 package com.dsh.lightningsword;
 
-import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
@@ -15,10 +16,10 @@ public class ThunderCrystalItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        tooltip.add(Text.translatable("item.lightning_sword.thunder_crystal.tooltip3").formatted(Formatting.AQUA));
-        tooltip.add(Text.translatable("item.lightning_sword.thunder_crystal.tooltip4").formatted(Formatting.AQUA));
-        tooltip.add(Text.translatable("item.lightning_sword.thunder_crystal.tooltip5").formatted(Formatting.GRAY));
-        tooltip.add(Text.translatable("item.lightning_sword.thunder_crystal.tooltip6").formatted(Formatting.GRAY));
+    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
+        textConsumer.accept(Text.translatable("item.lightning_sword.thunder_crystal.tooltip3").formatted(Formatting.AQUA));
+        textConsumer.accept(Text.translatable("item.lightning_sword.thunder_crystal.tooltip4").formatted(Formatting.AQUA));
+        textConsumer.accept(Text.translatable("item.lightning_sword.thunder_crystal.tooltip5").formatted(Formatting.GRAY));
+        textConsumer.accept(Text.translatable("item.lightning_sword.thunder_crystal.tooltip6").formatted(Formatting.GRAY));
     }
 }
