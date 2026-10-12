@@ -19,9 +19,12 @@ public class LightningSwordClient implements ClientModInitializer {
                       )
       );
 
+      // The bolt is submitted the same way vanilla submits its own lightning entity:
+      // a custom command on the world render queue with the vanilla lightning layer, which
+      // composites in the weather stage (after terrain and translucency).
       // The charging pose is data-driven in 1.21.11: assets/lightning_sword/items/lightning_sword.json
       // switches on the vanilla minecraft:using_item property, so no predicate registration is needed.
-      WorldRenderEvents.BEFORE_DEBUG_RENDER.register(BeamRenderer::render);
+      WorldRenderEvents.BEFORE_ENTITIES.register(BeamRenderer::render);
 
       ClientTickEvents.END_CLIENT_TICK.register(client -> {
          ClientBeams.tick();

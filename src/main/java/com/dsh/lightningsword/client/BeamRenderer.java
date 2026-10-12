@@ -2,10 +2,10 @@ package com.dsh.lightningsword.client;
 
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.minecraft.client.render.RenderLayers;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.command.OrderedRenderCommandQueue;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import org.joml.Matrix4f;
 
@@ -23,11 +23,10 @@ public final class BeamRenderer {
 
    public static void render(WorldRenderContext context) {
       if (!ClientBeams.active().isEmpty()) {
-         VertexConsumerProvider consumers = context.consumers();
-         MatrixStack matrices = context.matrices();
-         if (consumers != null && matrices != null) {
+         OrderedRenderCommandQueue queue = context.commandQueue();
+         if (queue != null) {
+            MatrixStack matrices = context.matrices();
             Vec3d camera = context.gameRenderer().getCamera().getCameraPos();
-            VertexConsumer buffer = consumers.getBuffer(RenderLayers.lightning());
 
             for (ClientBeams.Beam beam : ClientBeams.active()) {
                Vec3d delta = beam.end.subtract(beam.start);
@@ -48,20 +47,20 @@ public final class BeamRenderer {
                   Vec3d side = axis.crossProduct(Math.abs(axis.y) > 0.99 ? new Vec3d(1.0, 0.0, 0.0) : new Vec3d(0.0, 1.0, 0.0))
                      .normalize();
                   Vec3d up = side.crossProduct(axis).normalize();
-                  double scale = length / 128.0;
-                  Vec3d relative = from.subtract(camera);
-                  matrices.push();
-                  matrices.translate(relative.x, relative.y, relative.z);
-                  Matrix4f matrix = matrices.peek().getPositionMatrix();
-                  buildBolt(matrix, buffer, axis, side, up, scale, beam.shapeSeed(), beam.fade());
-                  matrices.pop();
+                  double scale = length / VANILLA_LENGTH;
+                  Vec3d offset = from.subtract(camera);
+                  MatrixStack boltMatrices = matrices != null ? matrices : new MatrixStack();
+                  queue.submitCustom(boltMatrices, RenderLayers.lightning(), (entry, buffer) ->
+                     buildBolt(entry.getPositionMatrix(), buffer, offset, axis, side, up, scale, beam.shapeSeed(), beam.fade()));
                }
             }
          }
       }
    }
 
-   private static void buildBolt(Matrix4f matrix, VertexConsumer buffer, Vec3d axis, Vec3d side, Vec3d up, double scale, int seed, float fade) {
+   private static void buildBolt(
+      Matrix4f matrix, VertexConsumer buffer, Vec3d offset, Vec3d axis, Vec3d side, Vec3d up, double scale, int seed, float fade
+   ) {
       float[] xs = new float[8];
       float[] zs = new float[8];
       float driftX = 0.0F;
@@ -105,10 +104,10 @@ public final class BeamRenderer {
                   widthFar *= (step - 1.0F) * 0.1F + 1.0F;
                }
 
-               drawBranch(matrix, buffer, axis, side, up, scale, fade, x, z, step, previousX, previousZ, widthNear, widthFar, false, false, true, false);
-               drawBranch(matrix, buffer, axis, side, up, scale, fade, x, z, step, previousX, previousZ, widthNear, widthFar, true, false, true, true);
-               drawBranch(matrix, buffer, axis, side, up, scale, fade, x, z, step, previousX, previousZ, widthNear, widthFar, true, true, false, true);
-               drawBranch(matrix, buffer, axis, side, up, scale, fade, x, z, step, previousX, previousZ, widthNear, widthFar, false, true, false, false);
+               drawBranch(matrix, buffer, offset, axis, side, up, scale, fade, x, z, step, previousX, previousZ, widthNear, widthFar, false, false, true, false);
+               drawBranch(matrix, buffer, offset, axis, side, up, scale, fade, x, z, step, previousX, previousZ, widthNear, widthFar, true, false, true, true);
+               drawBranch(matrix, buffer, offset, axis, side, up, scale, fade, x, z, step, previousX, previousZ, widthNear, widthFar, true, true, false, true);
+               drawBranch(matrix, buffer, offset, axis, side, up, scale, fade, x, z, step, previousX, previousZ, widthNear, widthFar, false, true, false, false);
             }
          }
       }
@@ -117,6 +116,7 @@ public final class BeamRenderer {
    private static void drawBranch(
       Matrix4f matrix,
       VertexConsumer buffer,
+      Vec3d offset,
       Vec3d axis,
       Vec3d side,
       Vec3d up,
@@ -134,16 +134,16 @@ public final class BeamRenderer {
       boolean shiftEast2,
       boolean shiftSouth2
    ) {
-      vertex(matrix, buffer, axis, side, up, scale, fade, x1 + (shiftEast1 ? offset1 : -offset1), y * 16.0F, z1 + (shiftSouth1 ? offset1 : -offset1));
-      vertex(matrix, buffer, axis, side, up, scale, fade, x2 + (shiftEast1 ? offset2 : -offset2), (y + 1) * 16.0F, z2 + (shiftSouth1 ? offset2 : -offset2));
-      vertex(matrix, buffer, axis, side, up, scale, fade, x2 + (shiftEast2 ? offset2 : -offset2), (y + 1) * 16.0F, z2 + (shiftSouth2 ? offset2 : -offset2));
-      vertex(matrix, buffer, axis, side, up, scale, fade, x1 + (shiftEast2 ? offset1 : -offset1), y * 16.0F, z1 + (shiftSouth2 ? offset1 : -offset1));
+      vertex(matrix, buffer, offset, axis, side, up, scale, fade, x1 + (shiftEast1 ? offset1 : -offset1), y * 16.0F, z1 + (shiftSouth1 ? offset1 : -offset1));
+      vertex(matrix, buffer, offset, axis, side, up, scale, fade, x2 + (shiftEast1 ? offset2 : -offset2), (y + 1) * 16.0F, z2 + (shiftSouth1 ? offset2 : -offset2));
+      vertex(matrix, buffer, offset, axis, side, up, scale, fade, x2 + (shiftEast2 ? offset2 : -offset2), (y + 1) * 16.0F, z2 + (shiftSouth2 ? offset2 : -offset2));
+      vertex(matrix, buffer, offset, axis, side, up, scale, fade, x1 + (shiftEast2 ? offset1 : -offset1), y * 16.0F, z1 + (shiftSouth2 ? offset1 : -offset1));
    }
 
    private static void vertex(
-      Matrix4f matrix, VertexConsumer buffer, Vec3d axis, Vec3d side, Vec3d up, double scale, float fade, float localX, float localY, float localZ
+      Matrix4f matrix, VertexConsumer buffer, Vec3d offset, Vec3d axis, Vec3d side, Vec3d up, double scale, float fade, float localX, float localY, float localZ
    ) {
-      Vec3d position = axis.multiply(localY * scale).add(side.multiply(localX * scale)).add(up.multiply(localZ * scale));
+      Vec3d position = axis.multiply(localY * scale).add(side.multiply(localX * scale)).add(up.multiply(localZ * scale)).add(offset);
       buffer.vertex(matrix, (float)position.x, (float)position.y, (float)position.z)
          .color(0.45F, 0.45F, 0.5F, 0.3F * fade);
    }
