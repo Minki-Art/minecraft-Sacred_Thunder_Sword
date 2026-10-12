@@ -1,0 +1,12 @@
+{
+  "item.lightning_sword.lightning_sword": "Sacred Thunder Sword",
+  "item.lightning_sword.lightning_sword.tooltip": "Hold right-click to charge, release to fire a bolt",
+  "item.lightning_sword.lightning_sword.tooltip2": "10 true damage - ignores armour - sets the target alight",
+  "item.lightning_sword.thunder_crystal": "Thunder Crystal",
+  "item.lightning_sword.thunder_crystal.tooltip3": "§bFound within the majestic cities of the End. Violent lightning still pulses inside",
+  "item.lightning_sword.thunder_crystal.tooltip4": "§bHolding it sends a slight tingle through your hand",
+  "item.lightning_sword.thunder_crystal.tooltip5": "§7Legends say an ancient god condensed this to command lightning. It awaits a new master...",
+  "item.lightning_sword.thunder_crystal.tooltip6": "§7A high-strength alloy might withstand its power. Try forging it",
+  "advancements.lightning_sword.sacred_thunder_sword.title": "Lost Thunder",
+  "advancements.lightning_sword.sacred_thunder_sword.description": "Reforge the alloy with the crystal and command a fury from ages past."
+}

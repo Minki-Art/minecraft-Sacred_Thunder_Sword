@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  },
+  "base": {
+    "item": "minecraft:netherite_sword"
+  },
+  "addition": {
+    "item": "lightning_sword:thunder_crystal"
+  },
+  "result": {
+    "count": 1,
+    "id": "lightning_sword:lightning_sword"
+  }
+}

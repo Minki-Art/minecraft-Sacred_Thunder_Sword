@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:end/find_end_city",
+  "display": {
+    "icon": {
+      "id": "lightning_sword:lightning_sword"
+    },
+    "title": {
+      "translate": "advancements.lightning_sword.sacred_thunder_sword.title",
+      "color": "gold"
+    },
+    "description": {
+      "translate": "advancements.lightning_sword.sacred_thunder_sword.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_sacred_thunder_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "lightning_sword:lightning_sword"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
