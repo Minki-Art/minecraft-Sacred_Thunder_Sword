@@ -1,3 +1,6 @@
+Sacred Thunder Sword
+[English](README.md) | [中文](README_zh.md)
+
 # 圣雷剑 Sacred Thunder Sword
 
 A Fabric mod（Minecraft **1.21/1.21.1/1.21.11**）：Right-click to charge; release to fire a **lightning bolt**. 
