@@ -3,11 +3,12 @@
 一个 Fabric 模组（Minecraft **1.21/1.21.1/1.21.11**）：右键蓄力，松手射出一道**闪电**，
 闪电会自动追踪准心附近的敌人，命中后点燃目标。
 
-![mod icon](src/main/resources/assets/lightning_sword/icon.png)
+![mod icon](src1.21/main/resources/assets/lightning_sword/icon.png)
 
 ---
 
 预览图：
+
 ![预览图1](picture/2026-10-12_21.45.02.png)
 ![预览图2](picture/2026-10-12_21.45.12.png)
 ![预览图3](picture/2026-10-12_21.41.36.png)

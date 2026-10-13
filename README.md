@@ -6,7 +6,7 @@ Sacred Thunder Sword
 A Fabric mod（Minecraft **1.21/1.21.1/1.21.11**）：Right-click to charge; release to fire a **lightning bolt**. 
 The lightning automatically homes in on enemies near the crosshair and ignites the target on hit.
 
-![mod icon](src/main/resources/assets/lightning_sword/icon.png)
+![mod icon](src1.21/main/resources/assets/lightning_sword/icon.png)
 
 ---
 
