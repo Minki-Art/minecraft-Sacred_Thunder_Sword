@@ -1,0 +1,15 @@
+{
+  "item.lightning_sword.lightning_sword": "圣雷剑",
+  "item.lightning_sword.lightning_sword.tooltip": "按住右键蓄力，松开射出闪电",
+  "item.lightning_sword.lightning_sword.tooltip2": "10 点真实伤害 · 无视护甲 · 命中点燃 5 秒",
+  "item.lightning_sword.lightning_sword.pose": "瞄准姿势：%s（%s/%s）",
+  "item.lightning_sword.thunder_crystal": "雷电晶矿",
+  "item.lightning_sword.thunder_crystal.tooltip3": "§b从末地雄伟的城市中寻得，晶体内部仍跳动着暴戾的雷光",
+  "item.lightning_sword.thunder_crystal.tooltip4": "§b拿在手中，似乎有点酥麻",
+  "item.lightning_sword.thunder_crystal.tooltip5": "§7传说远古大能提炼出掌握雷电的晶体，如今它在等待新的主人……",
+  "item.lightning_sword.thunder_crystal.tooltip6": "§7似乎高强度合金可以承受它的力量，尝试锻造它吧",
+  "key.lightning_sword.cycle_pose": "切换圣雷剑瞄准姿势",
+  "category.lightning_sword": "圣雷剑",
+  "advancements.lightning_sword.sacred_thunder_sword.title": "失落的雷鸣",
+  "advancements.lightning_sword.sacred_thunder_sword.description": "以晶石重铸合金，驾驭古早狂暴的力量。"
+}

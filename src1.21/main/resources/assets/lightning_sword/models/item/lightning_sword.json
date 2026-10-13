@@ -1,0 +1,56 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "lightning_sword:item/lightning_sword"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "lightning_sword:aim": 0.125
+      },
+      "model": "lightning_sword:item/lightning_sword_aim_0"
+    },
+    {
+      "predicate": {
+        "lightning_sword:aim": 0.25
+      },
+      "model": "lightning_sword:item/lightning_sword_aim_5"
+    },
+    {
+      "predicate": {
+        "lightning_sword:aim": 0.375
+      },
+      "model": "lightning_sword:item/lightning_sword_aim_5"
+    },
+    {
+      "predicate": {
+        "lightning_sword:aim": 0.5
+      },
+      "model": "lightning_sword:item/lightning_sword_aim_5"
+    },
+    {
+      "predicate": {
+        "lightning_sword:aim": 0.625
+      },
+      "model": "lightning_sword:item/lightning_sword_aim_5"
+    },
+    {
+      "predicate": {
+        "lightning_sword:aim": 0.75
+      },
+      "model": "lightning_sword:item/lightning_sword_aim_5"
+    },
+    {
+      "predicate": {
+        "lightning_sword:aim": 0.875
+      },
+      "model": "lightning_sword:item/lightning_sword_aim_5"
+    },
+    {
+      "predicate": {
+        "lightning_sword:aim": 1.0
+      },
+      "model": "lightning_sword:item/lightning_sword_aim_5"
+    }
+  ]
+}

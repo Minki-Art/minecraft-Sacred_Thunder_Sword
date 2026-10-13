@@ -5,3 +5,5 @@ run/
 .idea/
 *.iml
 *.log
+MIGRATION.md
+PROJECT-STATE.md

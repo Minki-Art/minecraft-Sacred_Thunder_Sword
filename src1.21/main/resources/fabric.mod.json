@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "lightning_sword",
+  "version": "1.0.0",
+  "name": "Lightning Sword",
+  "description": "A sword that charges up and fires a straight bolt of lightning out of its blade.",
+  "authors": [
+    "DSH"
+  ],
+  "license": "MIT",
+  "icon": "assets/lightning_sword/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.dsh.lightningsword.LightningSwordMod"
+    ],
+    "client": [
+      "com.dsh.lightningsword.client.LightningSwordClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": ">=1.21 <1.21.2",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
