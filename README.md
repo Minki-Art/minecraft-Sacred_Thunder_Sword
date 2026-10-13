@@ -78,8 +78,8 @@ tools/
 ├── gen_sword_model.py              ★ Extrudes sword texture silhouette into a 3D model (front/back/thickness)
 ├── preview_sword_model.py          Model structure self-check + preview render (no need to enter the game)
 ├── PoseSim.java / PoseSolve.java   Pose math simulator and solver (legacy, **currently no longer in tools/**)
-├── resourcepack-template/          Resource pack template (textures only, no compilation needed)
-└── patch_zipfs.py                  jdk.zipfs patch for DSH sandbox
+└── resourcepack-template/          Resource pack template (textures only, no compilation needed)
+
 ```
 
 ## License

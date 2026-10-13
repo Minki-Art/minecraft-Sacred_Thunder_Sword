@@ -97,8 +97,8 @@ tools/
 ├── gen_sword_model.py              ★ 把剑贴图轮廓挤出成 3D 模型（正面/背面/厚度）
 ├── preview_sword_model.py          模型结构自检 + 出预览图（不用进游戏）
 ├── PoseSim.java / PoseSolve.java   姿势数学模拟器与求解器（历史遗留，**当前已不在 tools/ 中**）
-├── resourcepack-template/          资源包模板（只有贴图，不用编译）
-└── patch_zipfs.py                  DSH 沙箱用的 jdk.zipfs 补丁
+└── resourcepack-template/          资源包模板（只有贴图，不用编译）
+
 ```
 
 ## 许可
